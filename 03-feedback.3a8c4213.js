@@ -1,0 +1,2 @@
+!function(){var e=document.getElementById("inputname"),t=document.getElementById("message"),a=document.getElementById("submit");window.addEventListener("load",(function(){var a=localStorage.getItem("message");a&&(e.value=a,t.value=a)})),a.addEventListener("click",(function(){inputField.value;localStorage.setItem("message","feedback-form-state"),alert("Información guardada en el almacenamiento local")}));throttle((function(){}),500)}();
+//# sourceMappingURL=03-feedback.3a8c4213.js.map

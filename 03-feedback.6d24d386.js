@@ -1,0 +1,2 @@
+const e=document.getElementById("inputname"),t=document.getElementById("message"),a=document.getElementById("submit");window.addEventListener("load",(()=>{const a=localStorage.getItem("message");a&&(e.value=a,t.value=a)})),a.addEventListener("click",(()=>{inputField.value;localStorage.setItem("message","feedback-form-state"),alert("Información guardada en el almacenamiento local")}));throttle((()=>{}),500);
+//# sourceMappingURL=03-feedback.6d24d386.js.map
