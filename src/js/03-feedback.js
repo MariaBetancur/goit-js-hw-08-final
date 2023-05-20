@@ -1,17 +1,25 @@
-const inputname = document.getElementById('inputname');
-const message = document.getElementById('message');
 const submit = document.getElementById('submit');
-
-// Cargar el valor guardado en el almacenamiento local al cargar la página
-window.addEventListener('load', () => {
-  const savedMessage = localStorage.getItem('message');
-  if (savedMessage) {
-    inputname.value = savedMessage;
-    message.value = savedMessage;
+submitBtn.addEventListener('click', () => {
+  const outputObj = {};
+  inputs.forEach(input => {
+    outputObj[input.id] = input.value;
+  });
+  const outputJSON = Json.stringify(outputObj);
+  document.getElementById('submit').textContent = submit;
+});
+const inputname = document.querySelectorAll('input');
+inputname.forEach(input => {
+  const savedValue = localStorage.getItem(input.id);
+  if (savedValue) {
+    input.value = savedValue;
   }
+  input.addEventListener('input', () => {
+    localStorage.setItem(input.id, 'feedback-form-state');
+  });
 });
 
 // Guardar el valor del campo de entrada en el almacenamiento local al hacer clic en el botón
+const message = document.getElementById('message');
 submit.addEventListener('click', () => {
   const message = inputField.value;
   localStorage.setItem('message', 'feedback-form-state');
@@ -20,5 +28,4 @@ submit.addEventListener('click', () => {
 const updatePlaybackTime = () => {
   // Lógica para actualizar el tiempo de reproducción
 };
-
 const throttledUpdatePlaybackTime = throttle(updatePlaybackTime, 500);
