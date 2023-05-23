@@ -1,31 +1,50 @@
-const submit = document.getElementById('submit');
-submitBtn.addEventListener('click', () => {
-  const outputObj = {};
-  inputs.forEach(input => {
-    outputObj[input.id] = input.value;
-  });
-  const outputJSON = Json.stringify(outputObj);
-  document.getElementById('submit').textContent = submit;
-});
-const inputname = document.querySelectorAll('input');
-inputname.forEach(input => {
-  const savedValue = localStorage.getItem(input.id);
-  if (savedValue) {
-    input.value = savedValue;
-  }
-  input.addEventListener('input', () => {
-    localStorage.setItem(input.id, 'feedback-form-state');
-  });
-});
+import throttle from 'lodash.throttle';
 
-// Guardar el valor del campo de entrada en el almacenamiento local al hacer clic en el botón
-const message = document.getElementById('message');
-submit.addEventListener('click', () => {
-  const message = inputField.value;
-  localStorage.setItem('message', 'feedback-form-state');
-  alert('Información guardada en el almacenamiento local');
-});
-const updatePlaybackTime = () => {
-  // Lógica para actualizar el tiempo de reproducción
-};
-const throttledUpdatePlaybackTime = throttle(updatePlaybackTime, 500);
+const FEEDBACK_FORM_KEY = 'feedback-form-state';
+const form = document.querySelector('.feedback-form');
+form.addEventListener('input', throttle(onSavingFormData, 500));
+form.addEventListener('submit', onFormSubmit);
+filledForm();
+
+function onSavingFormData() {
+  const emailInput = form.elements.email;
+  const messageInput = form.elements.message;
+
+  const formData = {
+    email: emailInput.value,
+    message: messageInput.value,
+  };
+
+  localStorage.setItem(FEEDBACK_FORM_KEY, JSON.stringify(formData));
+}
+
+function filledForm() {
+  const storedFormData = localStorage.getItem(FEEDBACK_FORM_KEY);
+
+  if (storedFormData) {
+    const { email, message } = JSON.parse(storedFormData);
+    form.elements.email.value = email;
+    form.elements.message.value = message;
+  }
+}
+
+function onFormSubmit(event) {
+  event.preventDefault();
+
+  const emailInput = form.elements.email;
+  const messageInput = form.elements.message;
+
+  if (emailInput.value === '' || messageInput.value === '') {
+    return console.log('Please fill in all fields!');
+  }
+
+  const formData = {
+    email: emailInput.value,
+    message: messageInput.value,
+  };
+
+  console.log(formData);
+
+  localStorage.removeItem(FEEDBACK_FORM_KEY);
+  form.reset();
+}

@@ -1,47 +1,42 @@
-import Player from '@vimeo/player';
+import Player from '@vimeo/player/dist/player.js';
+import throttle from 'lodash.throttle';
 
-const player = new Player('handstick', {
-  id: 19231868,
-  width: 640,
-});
+const iframe = document.querySelector('iframe');
+const player = new Player(iframe);
 
-player.on('play', function () {
-  console.log('played the video!');
-});
 const onPlay = function (data) {
-  // data is an object containing properties specific to that event
+  localStorage.setItem('videoplayer-current-time', data.seconds);
 };
 
 player.on('play', onPlay);
-player.on('timeupdate', function (data) {
-  {
-    duration: 61.857;
-    percent: 0.049;
-    seconds: 3.034;
-  }
-  const currentTime = data.seconds; // Obtén el tiempo actual del video en segundos
 
+player.on('timeupdate', function (data) {
+  const currentTime = data.seconds; // Obtén el tiempo actual del video en segundos
   console.log('Tiempo actual:', currentTime);
 });
-localStorage.setItem('currentTime', 'videoplayer-current-time');
+
+const localStorageKey = 'videoplayer-current-time';
+
 player
-  .setCurrentTime(30.456)
-  .then(function (seconds) {
-    // seconds = the actual time that the player seeked to
+  .setCurrentTime(localStorage.getItem(localStorageKey))
+  .then(function (time) {
+    localStorage.setItem(localStorageKey, time);
   })
   .catch(function (error) {
     switch (error.name) {
       case 'RangeError':
-        // the time was less than 0 or greater than the video’s duration
+        // El tiempo era menor que 0 o mayor que la duración del video
         break;
-
       default:
-        // some other error occurred
+        // Se produjo algún otro error
         break;
     }
   });
+
 const updatePlaybackTime = () => {
-  // Lógica para actualizar el tiempo de reproducción
+  const currentTime = localStorage.getItem(localStorageKey);
+  player.setCurrentTime(currentTime);
 };
 
 const throttledUpdatePlaybackTime = throttle(updatePlaybackTime, 1000);
+player.on('timeupdate', throttledUpdatePlaybackTime);
