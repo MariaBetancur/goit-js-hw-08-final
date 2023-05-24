@@ -23,25 +23,9 @@ gallery.insertAdjacentHTML(
     )
     .join('')
 );
-gallery.addEventListener('click', event => {
-  event.preventDefault();
-  const target = event.target;
-  if (target.nodeName !== 'IMG') return;
-  const imageSrc = target.dataset.source;
-  const instance = basicLightbox.create(`
-    <img src="${imageSrc}" width="800" height="600">
-  `);
-  instance.show();
-});
+
 let lightboxGallery = new SimpleLightbox('.gallery__link', {
   captionsData: 'alt',
   captionDelay: 250,
-});
-gallery.on('show.simplelightbox', function () {
-  // do something…
-});
-
-gallery.on('error.simplelightbox', function (e) {
-  console.log(e); // some usefull information
 });
 console.log(galleryItems);
